@@ -37,3 +37,38 @@ CREATE TABLE companies(
     created_at date NOT NULL,
 	updated_at date NOT NULL
 );
+
+CREATE TABLE games(
+    id int PRIMARY KEY NOT NULL,
+    name text NOT NULL,
+    created_at date NOT NULL,
+    updated_at date NOT NULL,
+    url text NOT NULL,
+    game_modes text,
+    summary text,
+    game_engines text,
+    follows int,
+    release_date date
+);
+
+CREATE TABLE game_plataform(
+    id_game int NOT NULL,
+    id_plataform smallint NOT NULL,
+    FOREIGN KEY (id_game) REFERENCES games(id),
+    FOREIGN KEY (id_plataform) REFERENCES plataform(id)
+);
+
+CREATE TABLE game_company(
+    id_game int NOT NULL,
+    id_company int NOT NULL,
+    FOREIGN KEY (id_game) REFERENCES games(id),
+    FOREIGN KEY (id_company) REFERENCES companies(id)
+);
+
+CREATE TABLE game_genre(
+    id_game int NOT NULL,
+    id_genre smallint NOT NULL,
+    FOREIGN KEY (id_game) REFERENCES games(id),
+    FOREIGN KEY (id_genre) REFERENCES genres(id)
+);
+                            

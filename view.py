@@ -11,6 +11,7 @@ class View():
         print('2. Popular a tabela Plataformas')
         print('3. Popular a tabela Gêneros')
         print('4. Popular a tabela Companhias')
+        print('5. Popular a tabela Jogos')
         print("7. Sair")
         opcao = int(input("Digite a opcao desejada : "))
         return opcao

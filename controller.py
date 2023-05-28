@@ -25,6 +25,10 @@ class Controller:
             if opcao == 4:
                 result = self.API.getCompanies()
                 self.view.imprimeStatus(result)
+            
+            if opcao == 5:
+                result = self.API.getGames()
+                self.view.imprimeStatus(result)
             opcao = self.view.menu()
 
 if __name__ == "__main__":

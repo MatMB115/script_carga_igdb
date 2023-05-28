@@ -30,3 +30,10 @@ class DAOCompanies():
     def select(session, id):
         company = session.query(Company).filter(Company.id == id).first()
         return company
+    
+class DAOGames():
+    
+    def select(session, id):
+        game = session.query(Game).filter(Game.id == id).first()
+        return game
+    
