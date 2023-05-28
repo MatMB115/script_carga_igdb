@@ -1,7 +1,5 @@
 from view import View
-from model import AcessToken, AcessDB, API
-from datetime import datetime
-
+from model import AcessToken, API
 
 class Controller:
     def __init__(self, Token, API):
@@ -21,7 +19,11 @@ class Controller:
                 self.view.imprimeStatus(result)
             
             if opcao == 3:
-                result = self.API.getPlataformVersion()
+                result = self.API.getGenres()
+                self.view.imprimeStatus(result)
+            
+            if opcao == 4:
+                result = self.API.getCompanies()
                 self.view.imprimeStatus(result)
             opcao = self.view.menu()
 

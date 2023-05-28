@@ -1,22 +1,25 @@
 # coding: utf-8
-from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import ObjectDeletedError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.exc import StaleDataError
+
 from DAO import *
 from mapeamento import *
+
 from igdb.wrapper import IGDBWrapper
 import json
 import requests
+from datetime import datetime
+from iso3166 import countries_by_numeric
 
 class AcessDB:
-    def insertPlat(plat):
+    def insert(plat):
         try:
-            session = DAOPlataform.getSession()
-            DAOPlataform.insert(session, plat)
+            session = DAO.getSession()
+            DAO.insert(session, plat)
             session.commit()
             session.close()
             return 1
@@ -25,12 +28,34 @@ class AcessDB:
 
     def selectPlat(id):
         try:
-            session = DAOPlataform.getSession()
+            session = DAO.getSession()
             session.expire_on_commit = False
             plat = DAOPlataform.select(session, id)
             session.commit()
             session.close()
             return plat
+        except:
+            return 0
+    
+    def selectGenre(id):
+        try:
+            session = DAO.getSession()
+            session.expire_on_commit = False
+            genre = DAOGenres.select(session, id)
+            session.commit()
+            session.close()
+            return genre
+        except:
+            return 0
+        
+    def selectCompany(id):
+        try:
+            session = DAO.getSession()
+            session.expire_on_commit = False
+            company = DAOCompanies.select(session, id)
+            session.commit()
+            session.close()
+            return company
         except:
             return 0
 
@@ -72,6 +97,13 @@ class API:
         self.token = token
         self.manipulateDB = AcessDB
 
+    def formatCountryIso(self, company):
+        country = countries_by_numeric.get(str(company['country']))
+        if country != None:
+            company['country'] = country[0]
+        else:
+            company['country'] = 'N/A'
+
     def formatDate(self, plat):
         plat['created_at'] = datetime.fromtimestamp(plat['created_at']).strftime('%Y-%m-%d')
         plat['updated_at'] = datetime.fromtimestamp(plat['updated_at']).strftime('%Y-%m-%d')
@@ -85,11 +117,13 @@ class API:
                 'fields id, name, abbreviation, alternative_name, generation, created_at, updated_at; limit 200;'#200
             )
             platforms_json = json.loads(byte_array)
-            print('Fazendo a carga das plataformas no banco...')
+            
             #Se por algum motivo retornar um json vazio, lança a exception
             if len(platforms_json) == 0:
                 raise Exception('Returned json is empty')
                 
+            print('Fazendo a carga das plataformas no banco...')
+
             for plat in platforms_json:
                 #Tratar a data (Timestamp) fornecida pela API
                 self.formatDate(plat)
@@ -112,7 +146,7 @@ class API:
                 check = self.manipulateDB.selectPlat(platObject.id)
                 id = str(platObject.id)
                 if not check:
-                    self.manipulateDB.insertPlat(platObject)
+                    self.manipulateDB.insert(platObject)
                     print('Plataforma inserida no banco. ID: ' + id)
                 else:
                     print('Plataforma já existe no banco. ID: ' + id)
@@ -122,23 +156,98 @@ class API:
         except Exception as e:
             return 'Lembre-se de gerar o token primeiro.\nERRO: ' + repr(e)
         
-    def getPlataformVersion(self):
+    def getGenres(self):
         try:
+            #Wrapper da biblioteca Apicalyse que suporta a API do IGDB
             wrapper = IGDBWrapper(self.token.getClientId(), self.token.getToken())
             byte_array = wrapper.api_request(
-                'platform_versions',
-                'fields id, name, os, memory, cpu, graphics, sound, connectivity, resolutions; limit 200;'#200
+                'genres',
+                'fields id, name, created_at, updated_at, url; limit 25;'#22
             )
-            platforms_json = json.loads(byte_array)
-            print('Fazendo a carga das versões das plataformas no banco...')
+            genres_json = json.loads(byte_array)
+            
             #Se por algum motivo retornar um json vazio, lança a exception
-            if len(platforms_json) == 0:
+            if len(genres_json) == 0:
                 raise Exception('Returned json is empty')
-                
-            for plat in platforms_json:
-                print(plat)
+
+            print('Fazendo a carga dos gêneros no banco...')
+
+            for genre in genres_json:
+                #Tratar a data (Timestamp) fornecida pela API
+                self.formatDate(genre)
+                #Criar objeto do tipo plataforma
+                genreObject = Genre(id=int(genre['id']),
+                                        name=str(genre['name']),
+                                        created_at=str(genre['created_at']),
+                                        updated_at=str(genre['updated_at']),
+                                        url = str(genre['url']))
+
+                #Verifica se o objeto já existe no banco
+                check = self.manipulateDB.selectGenre(genreObject.id)
+                id = str(genreObject.id)
+                if not check:
+                    self.manipulateDB.insert(genreObject)
+                    print('Genero inserido no banco. ID: ' + id)
+                else:
+                    print('Genero já existe no banco. ID: ' + id)
                     
             return 1
               
         except Exception as e:
             return 'Lembre-se de gerar o token primeiro.\nERRO: ' + repr(e)
+    
+    def getCompanies(self):
+        try:
+            #Wrapper da biblioteca Apicalyse que suporta a API do IGDB
+            wrapper = IGDBWrapper(self.token.getClientId(), self.token.getToken())
+            offset = 0
+            while offset < 45700:
+                request = 'fields id, name, created_at, updated_at, country; limit 500; offset ' + str(offset) + ';'
+                byte_array = wrapper.api_request(
+                    'companies',
+                    request
+                )
+                companies_json = json.loads(byte_array)
+                
+                #Se por algum motivo retornar um json vazio, lança a exception
+                if len(companies_json) == 0:
+                    raise Exception('Returned json is empty')
+                
+                print('Fazendo a carga das companhias no banco...')
+
+                for company in companies_json:
+                    #Tratar a data (Timestamp) fornecida pela API
+                    self.formatDate(company)
+                    
+                    if company.get('country'):
+                        #Tratar a ISO3166-1 Alpha-2 fornecida pela API
+                        self.formatCountryIso(company)
+                    else:
+                        company['country'] = 'N/A'
+                    
+                    #Criar objeto do tipo companhia 
+                    companyObject = Company(id=int(company['id']),
+                                            name=str(company['name']),
+                                            created_at=str(company['created_at']),
+                                            updated_at=str(company['updated_at']),
+                                            country=str(company['country']))
+                    
+                    #Verifica se o objeto já existe no banco
+                    check = self.manipulateDB.selectCompany(companyObject.id)
+                    id = str(companyObject.id)
+                    if not check:
+                        self.manipulateDB.insert(companyObject)
+                        print('Companhia inserida no banco. ID: ' + id)
+                    else:
+                        print('Companhia já existe no banco. ID: ' + id)
+                #Incrementa o offset para pegar os próximos 500 registros até o limite de 45500
+                if offset == 45500:
+                    offset += 123 #soma para o último offset
+                else:
+                    offset += 500
+                    
+            return 1
+              
+        except Exception as e:
+            return 'Lembre-se de gerar o token primeiro.\nERRO: ' + repr(e)
+        

@@ -9,7 +9,8 @@ class View():
         print("M E N U")
         print("1. Gerar token Twitch")
         print('2. Popular a tabela Plataformas')
-        print('3. Popular a tabela PlataformVersion')
+        print('3. Popular a tabela Gêneros')
+        print('4. Popular a tabela Companhias')
         print("7. Sair")
         opcao = int(input("Digite a opcao desejada : "))
         return opcao
