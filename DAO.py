@@ -37,3 +37,9 @@ class DAOGames():
         game = session.query(Game).filter(Game.id == id).first()
         return game
     
+class DAOCharacter():
+    
+    def select(session, id):
+        game = session.query(Character).filter(Character.id == id).first()
+        return game
+    

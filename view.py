@@ -12,7 +12,9 @@ class View():
         print('3. Popular a tabela Gêneros')
         print('4. Popular a tabela Companhias')
         print('5. Popular a tabela Jogos')
-        print("7. Sair")
+        print('6. Popular a tabela Personagens')
+        print('7. Popular todas as tabelas na ordem correta')
+        print("8. Sair")
         opcao = int(input("Digite a opcao desejada : "))
         return opcao
 

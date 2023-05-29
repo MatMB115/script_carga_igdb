@@ -7,16 +7,29 @@ Base = declarative_base()
 metadata = Base.metadata
 
 
+class Character(Base):
+    __tablename__ = 'character'
+    __table_args__ = {'schema': 'public'}
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Text, nullable=False)
+    created_at = Column(Date, nullable=False)
+    updated_at = Column(Date, nullable=False)
+    url = Column(Text, nullable=False)
+
+    games = relationship('Game', secondary='public.game_character')
+
+
 class Company(Base):
     __tablename__ = 'companies'
     __table_args__ = {'schema': 'public'}
 
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
-    country = Column(String(40))
+    country = Column(Text)
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
-
+    
 
 class Game(Base):
     __tablename__ = 'games'
@@ -60,6 +73,14 @@ class Plataform(Base):
     abbreviation = Column(String(50))
     alternative_name = Column(String(100))
     generation = Column(SmallInteger)
+
+
+t_game_character = Table(
+    'game_character', metadata,
+    Column('id_game', ForeignKey('public.games.id'), nullable=False),
+    Column('id_character', ForeignKey('public.character.id'), nullable=False),
+    schema='public'
+)
 
 
 t_game_company = Table(
