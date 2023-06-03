@@ -50,20 +50,37 @@ CREATE TABLE game_character(
     FOREIGN KEY (id_game) REFERENCES games(id),
     FOREIGN KEY (id_character) REFERENCES character(id)
 );
+	
 SELECT * FROM character WHERE id = 7090
-SELECT * FROM games WHERE id = 95080
+SELECT * FROM games WHERE id = 4848
 SELECT * FROM companies
 SELECT * FROM games
 SELECT * FROM genres
 SELECT * FROM plataform
+SELECT * FROM character
+SELECT * FROM game_company
+SELECT * FROM game_genre
+SELECT * FROM game_plataform
+SELECT * FROM game_character
+-- GERAL		
+SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id JOIN character ch ON gch.id_character = ch.id 
+	JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
+	JOIN game_company gc ON g.id = gc.id_game JOIN companies cp ON gc.id_company = cp.id 
+	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
+-- GAME + GENRE + PLAT
+SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
+	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
+-- GAME + GENRE
+SELECT * FROM games g JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
+-- GAME + PLAT
+SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id
+-- GAME + COMPANY
+SELECT * FROM games g JOIN game_company gc ON g.id = gc.id_game JOIN companies cp ON gc.id_company = cp.id
 	
+-- CUIDADO DELETES!!!!!!
 DELETE FROM plataform;
 DELETE FROM game_company;
 DELETE FROM game_genre;
 DELETE FROM game_plataform;
 DELETE FROM character;
-DELETE FROM game_character;
-	
-	
-SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id
-	JOIN character ch ON gch.id_character = ch.id
+DELETE FROM games;

@@ -41,20 +41,25 @@ As orientações estão divididas nos seguintes tópicos:
 
 - [Script de carga para API do IGDB](#script-de-carga-para-api-do-igdb)
   - [Sobre](#sobre)
-  - [Funcionalidades :gear:](#funcionalidades-gear)
+  - [To Do :gear:](#to-do-gear)
   - [Banco de dados :chair: :game\_die:](#banco-de-dados-chair-game_die)
   - [Pré-requisitos e configuração :hammer\_and\_wrench:](#pré-requisitos-e-configuração-hammer_and_wrench)
   - [Tecnologias :technologist:](#tecnologias-technologist)
   - [Contribuidores](#contribuidores)
 
 ---
-## Funcionalidades :gear:
+## To Do :gear:
 
- - [x] Inserir plataformas;
- - [x] Inserir gêneros;
- - [x] Inserir companhias;
- - [ ] Permitir o anúncio de novas vagas para usuários cadastrados;
- - [ ] Marcar no mapa as vagas já cadastradas.
+ - [x] Inserir Plataformas
+ - [x] Inserir Gêneros
+ - [x] Inserir Companhias
+ - [ ] Inserir Modos de Jogo
+ - [ ] Inserir Jogos
+ - [ ] Inserir Personagens
+ - [ ] Criar índices
+ - [ ] Testar com JMeter
+ - [ ] Documentação da parte um
+ - [ ] Vídeo explicativo
 
 ---
 ## Banco de dados :chair: :game_die:
