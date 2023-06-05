@@ -1,55 +1,31 @@
+-- Criar usuários
+CREATE ROLE usuario;
+CREATE ROLE dev;
+CREATE ROLE dba;
+
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO usuario;
+GRANT SELECT, INSERT, DELETE, UPDATE ON ALL TABLES IN SCHEMA public TO dev;
+GRANT ALL ON DATABASE "IGDB" TO dba;
+
+CREATE USER martinsDBA WITH PASSWORD 'fabosmati';
+CREATE USER martinsDEV WITH PASSWORD 'fabosmati';
+CREATE USER martinsUSER WITH PASSWORD 'fabosmati';
+
+GRANT usuario TO martinsUSER;
+GRANT dev TO martinsDEV;
+GRANT dba TO martinsDBA;
+
+GRANT USAGE ON SCHEMA public TO martinsUSER;
+GRANT USAGE ON SCHEMA public TO martinsDEV;
+GRANT USAGE ON SCHEMA public TO martinsDBA;
+
+-- Verificar criação correta de roles e users
+SELECT * FROM pg_roles where rolname = 'dev';
+SELECT * FROM information_schema.role_table_grants where grantee='usuario';
+
+-- Manipulações gerais do banco
+
 SELECT * FROM companies
-CREATE TABLE games(
-
-
-CREATE TABLE games(
-    id int PRIMARY KEY NOT NULL,
-    name text NOT NULL,
-    created_at date NOT NULL,
-    updated_at date NOT NULL,
-    url text NOT NULL,
-    game_modes text,
-    summary text,
-    game_engines text,
-    follows int,
-    release_date date
-);
-
-CREATE TABLE game_plataform(
-    id_game int NOT NULL,
-    id_plataform smallint NOT NULL,
-    FOREIGN KEY (id_game) REFERENCES games(id),
-    FOREIGN KEY (id_plataform) REFERENCES plataform(id)
-);
-
-CREATE TABLE game_company(
-    id_game int NOT NULL,
-    id_company int NOT NULL,
-    FOREIGN KEY (id_game) REFERENCES games(id),
-    FOREIGN KEY (id_company) REFERENCES companies(id)
-);
-
-CREATE TABLE game_genre(
-    id_game int NOT NULL,
-    id_genre smallint NOT NULL,
-    FOREIGN KEY (id_game) REFERENCES games(id),
-    FOREIGN KEY (id_genre) REFERENCES genres(id)
-);
-	
-CREATE TABLE character(
-    id int PRIMARY KEY NOT NULL,
-    name text NOT NULL,
-    created_at date NOT NULL,
-    updated_at date NOT NULL,
-    url text NOT NULL
-);
-
-CREATE TABLE game_character(
-    id_game int NOT NULL,
-    id_character int NOT NULL,
-    FOREIGN KEY (id_game) REFERENCES games(id),
-    FOREIGN KEY (id_character) REFERENCES character(id)
-);
 	
 SELECT * FROM character WHERE id = 7090
 SELECT * FROM games WHERE id = 4848
@@ -58,10 +34,12 @@ SELECT * FROM games
 SELECT * FROM genres
 SELECT * FROM plataform
 SELECT * FROM character
+SELECT * FROM games_modes
 SELECT * FROM game_company
 SELECT * FROM game_genre
 SELECT * FROM game_plataform
 SELECT * FROM game_character
+SELECT * FROM game_gamemode
 -- GERAL		
 SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id JOIN character ch ON gch.id_character = ch.id 
 	JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
@@ -78,9 +56,15 @@ SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform
 SELECT * FROM games g JOIN game_company gc ON g.id = gc.id_game JOIN companies cp ON gc.id_company = cp.id
 	
 -- CUIDADO DELETES!!!!!!
+DELETE FROM games;
+DELETE FROM companies;
+DELETE FROM games_modes;
+DELETE FROM genres;
 DELETE FROM plataform;
+DELETE FROM character;
+DELETE FROM games_modes;
 DELETE FROM game_company;
 DELETE FROM game_genre;
 DELETE FROM game_plataform;
-DELETE FROM character;
-DELETE FROM games;
+DELETE FROM game_character;
+DELETE FROM game_gamemode;

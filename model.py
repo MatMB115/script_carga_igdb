@@ -81,6 +81,17 @@ class AcessDB:
         except:
             return 0
         
+    def selectGamesModes(id):
+        try:
+            session = DAO.getSession()
+            session.expire_on_commit = False
+            mode = DAOGamesModes.select(session, id)
+            session.commit()
+            session.close()
+            return mode
+        except:
+            return 0
+
 class AcessToken:
     def __init__(self):
         self.clientId = 'cividn0xlqz29fotpopze64bjpqk0y'
@@ -123,7 +134,7 @@ class API:
         if country != None:
             company['country'] = country[0]
         else:
-            company['country'] = 'N/A'
+            company['country'] = None
 
     def formatDate(self, plat):
         plat['created_at'] = datetime.fromtimestamp(plat['created_at']).strftime('%Y-%m-%d')
@@ -151,16 +162,16 @@ class API:
                 if not plat.get('generation'):
                     plat['generation'] = 1
                 if not plat.get('alternative_name'):
-                    plat['alternative_name'] = 'N/A'
+                    plat['alternative_name'] = None
                 if not plat.get('abbreviation'):
-                    plat['abbreviation'] = 'N/A'
+                    plat['abbreviation'] = None
                 #Criar objeto do tipo plataforma
                 platObject = Plataform(id=int(plat['id']),
                                         name=str(plat['name']),
                                         created_at=str(plat['created_at']),
                                         updated_at=str(plat['updated_at']),
-                                        abbreviation=str(plat['abbreviation']),
-                                        alternative_name=str(plat['alternative_name']),
+                                        abbreviation=plat['abbreviation'],
+                                        alternative_name=plat['alternative_name'],
                                         generation=int(plat['generation']))
 
                 #Verifica se o objeto já existe no banco
@@ -172,7 +183,7 @@ class API:
                     self.manipulateDB.insert(platObject)
                     print('Plataforma inserida no banco. ID: ' + id + ' Nome: ' + name)
                 else:
-                    print('Plataforma já existe no banco. ID: ' + id + + ' Nome: ' + name)
+                    print('Plataforma já existe no banco. ID: ' + id + ' Nome: ' + name)
                     
             return 1
               
@@ -199,7 +210,7 @@ class API:
                 #Tratar a data (Timestamp) fornecida pela API
                 self.formatDate(genre)
                 #Criar objeto do tipo plataforma
-                genreObject = Genre(id=int(genre['id']),
+                genreObject = Genres(id=int(genre['id']),
                                         name=str(genre['name']),
                                         created_at=str(genre['created_at']),
                                         updated_at=str(genre['updated_at']),
@@ -220,6 +231,47 @@ class API:
         except Exception as e:
             return 'Lembre-se de gerar o token primeiro.\nERRO: ' + repr(e)
     
+    def getGameModes(self):
+        try:
+            #Wrapper da biblioteca Apicalyse que suporta a API do IGDB
+            wrapper = IGDBWrapper(self.token.getClientId(), self.token.getToken())
+            byte_array = wrapper.api_request(
+                'game_modes',
+                'fields id, name, created_at, updated_at, url; limit 10;'#22
+            )
+            game_mode_json = json.loads(byte_array)
+            
+            #Se por algum motivo retornar um json vazio, lança a exception
+            if len(game_mode_json) == 0:
+                raise Exception('Returned json is empty')
+
+            print('Fazendo a carga dos gêneros no banco...')
+
+            for mode in game_mode_json:
+                #Tratar a data (Timestamp) fornecida pela API
+                self.formatDate(mode)
+                #Criar objeto do tipo plataforma
+                gameModeObject = GamesModes(id=int(mode['id']),
+                                        name=str(mode['name']),
+                                        created_at=str(mode['created_at']),
+                                        updated_at=str(mode['updated_at']),
+                                        url = str(mode['url']))
+
+                #Verifica se o objeto já existe no banco
+                check = self.manipulateDB.selectGamesModes(gameModeObject.id)
+                id = str(gameModeObject.id)
+                name = str(gameModeObject.name)
+                if not check:
+                    self.manipulateDB.insert(gameModeObject)
+                    print('Modo de Jogo inserido no banco. ID: ' + id + ' Nome: ' + name)
+                else:
+                    print('Modo de Jogo já existe no banco. ID: ' + id + ' Nome: ' + name)
+                    
+            return 1
+              
+        except Exception as e:
+            return 'Lembre-se de gerar o token primeiro.\nERRO: ' + repr(e)
+
     def getCompanies(self):
         try:
             #Wrapper da biblioteca Apicalyse que suporta a API do IGDB
@@ -247,14 +299,14 @@ class API:
                         #Tratar a ISO3166-1 Alpha-2 fornecida pela API
                         self.formatCountryIso(company)
                     else:
-                        company['country'] = 'N/A'
+                        company['country'] = None
                     
                     #Criar objeto do tipo companhia 
-                    companyObject = Company(id=int(company['id']),
+                    companyObject = Companies(id=int(company['id']),
                                             name=str(company['name']),
                                             created_at=str(company['created_at']),
                                             updated_at=str(company['updated_at']),
-                                            country=str(company['country']))
+                                            country=company['country'])
                     #Verifica se o objeto já existe no banco
                     check = self.manipulateDB.selectCompany(companyObject.id)
                     id = str(companyObject.id)
@@ -277,17 +329,6 @@ class API:
             #Wrapper da biblioteca Apicalyse que suporta a API do IGDB
             wrapper = IGDBWrapper(self.token.getClientId(), self.token.getToken())
 
-            #Recuperar os modos de jogo
-            byte_array = wrapper.api_request(
-                'game_modes',
-                'fields id, name; limit 10;'
-            )
-            modes_json = json.loads(byte_array)
-
-            #Se por algum motivo retornar um json vazio, lança a exception
-            if len(modes_json) == 0:
-                raise Exception('Returned game modes json is empty')
-            
             #Recuperar todos os motores gráficos dos jogos
             offset = 0
             engines_json = []
@@ -311,10 +352,11 @@ class API:
             noRelationWithCompany = 0
             noRelationWithGenre = 0
             noRelationWithPlat = 0
+            noRelationWithGameMode = 0
             insertedGames = 0
             offset = 0
 
-            while offset < 230000:
+            while offset < 235000:
                 request = 'fields id, name, summary, genres, platforms, created_at, updated_at, game_engines, url, game_modes, first_release_date, involved_companies, follows; limit 500; offset ' + str(offset) + ';'
                 byte_array = wrapper.api_request(
                     'games',
@@ -334,11 +376,11 @@ class API:
                         
                     #Tratar o summary
                     if not game.get('summary'):
-                        game['summary'] = 'N/A'
+                        game['summary'] = None
 
                     #Tratar se há motores de jogo e modos de jogo
                     if not game.get('game_engines'):
-                        game['game_engines'] = 'N/A'
+                        game['game_engines'] = None
                     else:
                         #Recuperar o nome do motor de jogo
                         for engine in engines_json:
@@ -346,29 +388,21 @@ class API:
                                 game['game_engines'] = engine['name']
                                 break
 
-                    if not game.get('game_modes'):
-                        game['game_modes'] = 'N/A'
-                    else:
-                        #Recuperar o nome do modo de jogo
-                        for mode in modes_json:
-                            if mode['id'] == game['game_modes'][0]:
-                                game['game_modes'] = mode['name']
-                                break
-
                     #Tratar o follows
                     if not game.get('follows'):
                         game['follows'] = 0
+
                     #Criar objeto do tipo jogo
-                    gameObject = Game(id=int(game['id']),
+                    gameObject = Games(id=int(game['id']),
                                         name=str(game['name']),
                                         created_at=str(game['created_at']),
                                         updated_at=str(game['updated_at']),
                                         url=str(game['url']),
-                                        game_engines=str(game['game_engines']),
-                                        game_modes=str(game['game_modes']),
-                                        summary=str(game['summary']),
+                                        game_engines=game['game_engines'],
+                                        summary=game['summary'],
                                         follows=int(game['follows']),
                                         release_date=game['first_release_date'])
+                    
                     #imprimir todos atributos do objeto
                     #Verifica se o objeto já existe no banco
                     check = self.manipulateDB.selectGames(gameObject.id)
@@ -387,6 +421,17 @@ class API:
                         else:
                             #print('Jogo não possui companhia. ID: ' + str(game['id']))
                             noRelationWithCompany += 1
+
+                        #Acionar o relacionamento dos modos de jogo
+                        if game.get('game_modes'):
+                            for mode in game['game_modes']:
+                                gameModeObject = self.manipulateDB.selectGamesModes(int(mode))
+                                if not gameModeObject:
+                                    noRelationWithCompany += 1
+                                else:
+                                    gameObject.games_modes.append(gameModeObject)
+                        else:
+                            noRelationWithGameMode += 1
 
                         #Adicionar o relacionamento dos gêneros
                         if game.get('genres'):
@@ -421,9 +466,11 @@ class API:
                         print('Jogo já existe no banco. ID: ' + str(id) + ' Nome: ' + name)
 
                 offset += 500
+
             print('Quantidade de jogos que não possuem relacionamento com companhias: ' + str(noRelationWithCompany))
             print('Quantidade de jogos que não possuem relacionamento com gêneros: ' + str(noRelationWithGenre))
             print('Quantidade de jogos que não possuem relacionamento com plataformas: ' + str(noRelationWithPlat))
+            print('Quantidade de jogos que não possuem relacionamento com modos de jogo: ' + str(noRelationWithGameMode))
             print('Quantidade de jogos inseridos no banco: ' + str(insertedGames))
             return 1
 

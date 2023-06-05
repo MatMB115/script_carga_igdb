@@ -22,24 +22,30 @@ class DAOPlataform():
 class DAOGenres():
     
     def select(session, id):
-        genre = session.query(Genre).filter(Genre.id == id).first()
+        genre = session.query(Genres).filter(Genres.id == id).first()
         return genre
     
 class DAOCompanies():
     
     def select(session, id):
-        company = session.query(Company).filter(Company.id == id).first()
+        company = session.query(Companies).filter(Companies.id == id).first()
         return company
     
 class DAOGames():
     
     def select(session, id):
-        game = session.query(Game).filter(Game.id == id).first()
+        game = session.query(Games).filter(Games.id == id).first()
         return game
     
 class DAOCharacter():
     
     def select(session, id):
-        game = session.query(Character).filter(Character.id == id).first()
-        return game
+        chara = session.query(Character).filter(Character.id == id).first()
+        return chara
+    
+class DAOGamesModes():
+    
+    def select(session, id):
+        mode = session.query(GamesModes).filter(GamesModes.id == id).first()
+        return mode
     

@@ -49,17 +49,25 @@ As orientações estão divididas nos seguintes tópicos:
 
 ---
 ## To Do :gear:
-
- - [x] Inserir Plataformas
- - [x] Inserir Gêneros
- - [x] Inserir Companhias
- - [ ] Inserir Modos de Jogo
- - [ ] Inserir Jogos
- - [ ] Inserir Personagens
- - [ ] Criar índices
- - [ ] Testar com JMeter
- - [ ] Documentação da parte um
- - [ ] Vídeo explicativo
+- [x] Etapa 1
+  - [x] Escolher API 
+- [x] Etapa 2
+  - [x] Estudar os Dados da API
+  - [x] Gerar Modelo Entidade Relacionamento
+  - [x] Implementar Banco de Dados
+- [x] Etapa 3
+  - [x] Criar script  
+  - [x] Inserir Plataformas
+  - [x] Inserir Gêneros
+  - [x] Inserir Companhias
+  - [ ] Inserir Modos de Jogo
+  - [x] Inserir Jogos
+  - [x] Inserir Personagens
+  - [ ] Criar índices
+- [ ] Etapa 4
+  - [ ] Testar com JMeter
+  - [ ] Documentação da parte um
+  - [ ] Vídeo explicativo
 
 ---
 ## Banco de dados :chair: :game_die:
@@ -85,10 +93,7 @@ $ git clone https://github.com/MatMB115/script_carga_igdb
 $ git clone git@github.com:MatMB115/script_carga_igdb.git
 
 # Instale as dependências
-$ pip intall {nome_da_dependência}
-
-# Destaque para ISO3166
-$ pip install iso3166
+$ pip install -r requirement.txt
 
 # Abra script no Vscode e rode com button run
 code .

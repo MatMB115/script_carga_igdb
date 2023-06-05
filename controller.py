@@ -10,34 +10,40 @@ class Controller:
     def inicio(self):
         opcao = self.view.inicio()
 
-        while opcao != 8:
+        while opcao != 9:
             if opcao == 1:
                 self.view.imprimeStatusToken(self.Token.generateToken(), self.Token.getToken())
             
             if opcao == 2:
                 result = self.API.getPlataforms()
                 self.view.imprimeStatus(result)
-            
+
             if opcao == 3:
                 result = self.API.getGenres()
                 self.view.imprimeStatus(result)
-            
+
             if opcao == 4:
-                result = self.API.getCompanies()
+                result = self.API.getGameModes()
                 self.view.imprimeStatus(result)
             
             if opcao == 5:
+                result = self.API.getCompanies()
+                self.view.imprimeStatus(result)
+            
+            if opcao == 6:
                 result = self.API.getGames()
                 self.view.imprimeStatus(result)
 
-            if opcao == 6:
+            if opcao == 7:
                 result = self.API.getCharacter()
                 self.view.imprimeStatus(result)
-            if opcao == 7:
+            if opcao == 8:
                 #Chama todos os métodos de popular as tabelas
                 result = self.API.getPlataforms()
                 self.view.imprimeStatus(result)
                 result = self.API.getGenres()
+                self.view.imprimeStatus(result)
+                result = self.API.getGameModes()
                 self.view.imprimeStatus(result)
                 result = self.API.getCompanies()
                 self.view.imprimeStatus(result)

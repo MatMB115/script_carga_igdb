@@ -10,11 +10,12 @@ class View():
         print("1. Gerar token Twitch")
         print('2. Popular a tabela Plataformas')
         print('3. Popular a tabela Gêneros')
-        print('4. Popular a tabela Companhias')
-        print('5. Popular a tabela Jogos')
-        print('6. Popular a tabela Personagens')
-        print('7. Popular todas as tabelas na ordem correta')
-        print("8. Sair")
+        print('4. Popular a tabela Modos de Jogo')
+        print('5. Popular a tabela Companhias')
+        print('6. Popular a tabela Jogos')
+        print('7. Popular a tabela Personagens')
+        print('8. Popular todas as tabelas na ordem correta')
+        print("9. Sair")
         opcao = int(input("Digite a opcao desejada : "))
         return opcao
 
