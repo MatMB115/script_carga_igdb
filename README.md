@@ -50,17 +50,17 @@ As orientações estão divididas nos seguintes tópicos:
 ---
 ## To Do :gear:
 - [x] Etapa 1
-  - [x] Escolher API 
+  - [x] Escolher API
 - [x] Etapa 2
   - [x] Estudar os Dados da API
   - [x] Gerar Modelo Entidade Relacionamento
   - [x] Implementar Banco de Dados
 - [x] Etapa 3
-  - [x] Criar script  
+  - [x] Criar script
   - [x] Inserir Plataformas
   - [x] Inserir Gêneros
   - [x] Inserir Companhias
-  - [ ] Inserir Modos de Jogo
+  - [x] Inserir Modos de Jogo
   - [x] Inserir Jogos
   - [x] Inserir Personagens
   - [ ] Criar índices
@@ -99,18 +99,11 @@ $ git clone git@github.com:MatMB115/script_carga_igdb.git
 
 $ cd script_carga_igdb
 
-# Inicie o env python
-$ source script_carga_igdb/bin/activate
-
-# Entre no diretório do env
-
-$ cd script_carga_igdb
-
 # Instale as dependências
 $ pip install -r req.txt
 
 # Abra script no Vscode e rode com button run
-code .
+$ code .
 # OU
 # Rode o script pelo terminal
 $ py controller.py
@@ -121,7 +114,7 @@ $ python3 controller.py
 ```
 ---
 ## Tecnologias :technologist:
-    O ponto de início deste projeto foi um ambiente Python, as dependências utilizadas estão presentes no 'req.txt'. 
+    O ponto de início deste projeto foi um ambiente Python, as dependências utilizadas estão presentes no 'reqs.txt'. 
 ---
 Dependências:
 
