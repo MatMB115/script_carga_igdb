@@ -1,0 +1,17 @@
+annotated-types==0.5.0
+certifi==2023.5.7
+charset-normalizer==3.1.0
+greenlet==2.0.2
+idna==3.4
+igdb-api-v4==0.2.0
+inflect==6.0.4
+iso3166==2.1.1
+protobuf==4.23.2
+psycopg2==2.9.6
+pydantic==2.0b2
+pydantic_core==0.38.0
+requests==2.31.0
+sqlacodegen==3.0.0rc2
+SQLAlchemy==1.4.48
+typing_extensions==4.6.3
+urllib3==2.0.2

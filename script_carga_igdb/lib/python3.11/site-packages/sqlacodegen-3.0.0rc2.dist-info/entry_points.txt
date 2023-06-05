@@ -1,0 +1,8 @@
+[console_scripts]
+sqlacodegen = sqlacodegen.cli:main
+
+[sqlacodegen.generators]
+dataclasses = sqlacodegen.generators:DataclassGenerator
+declarative = sqlacodegen.generators:DeclarativeGenerator
+sqlmodels = sqlacodegen.generators:SQLModelGenerator
+tables = sqlacodegen.generators:TablesGenerator

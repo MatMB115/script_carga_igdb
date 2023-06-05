@@ -74,14 +74,17 @@ As orientações estão divididas nos seguintes tópicos:
 A aplicação utiliza um banco relacional presente no modelo entidade relacionamento abaixo...
 
 Para realizar a conexão com o banco utilizou-se:
->postgres: 15.2^
->PGadmin4
+>PostgreSQL - 15.2
+
+>PGadmin4 - 7.2
+
+>SQLAlchemy - 1.4.48
 
 ---
 ## Pré-requisitos e configuração :hammer_and_wrench:
 No geral, para executar a aplicação é recomendado que o sistema já possua:
 
-    > Python 3^;
+    > Python 3.11
 
 Para executar esse script é necessário:
 
@@ -89,33 +92,47 @@ Para executar esse script é necessário:
 
 # Clone este repositório com
 $ git clone https://github.com/MatMB115/script_carga_igdb
-# ou
+# OU
 $ git clone git@github.com:MatMB115/script_carga_igdb.git
 
+# Navegue até o diretório clonado com terminal
+
+$ cd script_carga_igdb
+
+# Inicie o env python
+$ source script_carga_igdb/bin/activate
+
+# Entre no diretório do env
+
+$ cd script_carga_igdb
+
 # Instale as dependências
-$ pip install -r requirement.txt
+$ pip install -r req.txt
 
 # Abra script no Vscode e rode com button run
 code .
-
-#Rode o script pelo terminal
+# OU
+# Rode o script pelo terminal
 $ py controller.py
-#ou
+# OU
 $ python3 controller.py
 
 
 ```
 ---
 ## Tecnologias :technologist:
-    O ponto de início deste projeto foi um ambiente Python, as dependências utilizadas estão presentes no Pipfile. 
+    O ponto de início deste projeto foi um ambiente Python, as dependências utilizadas estão presentes no 'req.txt'. 
 ---
 Dependências:
 
-    -> Python 3.10.10
+    -> Python 3.11
     - SQLAlchemy 2.3
-    - Psycopg2
+    - psycopg2 2.9.6
     - iso3166 2.1.1
-    - datetime
+    - annotated-types 0.5
+    - igdb-api-v4 0.2
+    - protobuf 4.23.2
+    - sqlacodegen 3.0.0rc2
 ---
 Banco de Dados:
 
@@ -126,7 +143,7 @@ Banco de Dados:
 Utilitários:
 
     -> Dev
-    - Visual Studio Code 1.73
+    - Visual Studio Code 1.78
 ---  
 
 ## Contribuidores
