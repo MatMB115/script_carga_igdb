@@ -63,7 +63,13 @@ As orientações estão divididas nos seguintes tópicos:
   - [x] Inserir Modos de Jogo
   - [x] Inserir Jogos
   - [x] Inserir Personagens
-  - [ ] Criar índices
+  - [x] Criar índices
+    - [x] Data de Lançamento Jogos
+    - [x] Relacionamento Plataforma e Games
+    - [x] Relacionamento Gênero e Games
+    - [x] Relacionamneto Modo de Jogo e Games
+  - [x] Funções
+    - [x] Count das tabelas
 - [ ] Etapa 4
   - [ ] Testar com JMeter
   - [ ] Documentação da parte um

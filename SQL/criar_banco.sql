@@ -112,3 +112,32 @@ CREATE TABLE game_gamemode(
     FOREIGN KEY (id_game) REFERENCES games(id),
     FOREIGN KEY (id_game_mode) REFERENCES games_modes(id)
 );
+
+-- ÍNDICES PARA TABELA GAMES
+CREATE INDEX release_game_date ON games USING btree (release_date);
+
+-- ÍNDICES NA TABELA DE RELACIONAMENTO PLATAFORMA E GAMES
+CREATE INDEX idx_game_plataform ON game_plataform (id_game, id_plataform);
+
+-- ÍNDICES NA TABELA DE RELACIONAMENTO GÊNEROS E GAMES
+CREATE INDEX idx_game_genres ON game_genre (id_game, id_genre);
+
+-- ÍNDICES NA TABELA DE RELACIONAMENTO MODO DE JOGO E GAMES
+CREATE INDEX idx_game_game_mode ON game_gamemode (id_game, id_game_mode);
+
+-- COUNT DA QUANTIDADE DE REGISTRO DAS TABELAS
+CREATE OR REPLACE FUNCTION count_rows(tablename text) RETURNS integer AS
+	$$
+	DECLARE
+		result integer;
+	BEGIN
+		EXECUTE 'SELECT count(*) FROM ' || tablename INTO result;
+		RETURN result;
+	END;
+	$$ language plpgsql;
+	
+-- CONSULTAR QUANTIDADE DE LINHAS NA TABELA
+SELECT table_name, count_rows(table_name) 
+FROM information_schema.tables 
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema') 
+ORDER by count_rows(table_name) DESC

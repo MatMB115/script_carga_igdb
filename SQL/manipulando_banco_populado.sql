@@ -30,7 +30,7 @@ SELECT * FROM companies
 SELECT * FROM character WHERE id = 7090
 SELECT * FROM games WHERE id = 4848
 SELECT * FROM companies
-SELECT * FROM games
+SELECT * FROM games WHERE name ilike 'war%'
 SELECT * FROM genres
 SELECT * FROM plataform
 SELECT * FROM character
@@ -41,20 +41,39 @@ SELECT * FROM game_plataform
 SELECT * FROM game_character
 SELECT * FROM game_gamemode
 -- GERAL		
-SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id JOIN character ch ON gch.id_character = ch.id 
+SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id JOIN character ch ON gch.id_character = ch.id ]
 	JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
 	JOIN game_company gc ON g.id = gc.id_game JOIN companies cp ON gc.id_company = cp.id 
 	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
+-- GAME + GENRE + PLAT + GAMEMODE
+SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
+	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
+	JOIN game_gamemode gms ON gms.id_game = g.id JOIN games_modes gmd ON gms.id_game_mode = gmd.id
 -- GAME + GENRE + PLAT
 SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
 	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
 -- GAME + GENRE
-SELECT * FROM games g JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
+EXPLAIN ANALYZE SELECT * FROM games g JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id
 -- GAME + PLAT
 SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id
 -- GAME + COMPANY
 SELECT * FROM games g JOIN game_company gc ON g.id = gc.id_game JOIN companies cp ON gc.id_company = cp.id
+
+-- GAME + GAMEMODE
+SELECT * FROM games g JOIN game_gamemode gms ON gms.id_game = g.id JOIN games_modes gmd ON gms.id_game_mode = gmd.id
+
+-- EXPLAIN ANALYZE DAS CONSULTAS
+
+EXPLAIN ANALYZE SELECT * FROM games WHERE release_date > '01/01/2011'
+EXPLAIN ANALYZE SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
+	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id 
 	
+-- CONSULTAR QUANTIDADE DE LINHAS NA TABELA
+SELECT table_name, count_rows(table_name) 
+FROM information_schema.tables 
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema') 
+ORDER by count_rows(table_name) DESC
+
 -- CUIDADO DELETES!!!!!!
 DELETE FROM games;
 DELETE FROM companies;
