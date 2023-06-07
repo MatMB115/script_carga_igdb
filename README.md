@@ -106,7 +106,7 @@ $ git clone git@github.com:MatMB115/script_carga_igdb.git
 $ cd script_carga_igdb
 
 # Instale as dependências
-$ pip install -r req.txt
+$ pip install -r reqs.txt
 
 # Abra script no Vscode e rode com button run
 $ code .
