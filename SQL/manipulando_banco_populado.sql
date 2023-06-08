@@ -67,6 +67,9 @@ SELECT * FROM games g JOIN game_gamemode gms ON gms.id_game = g.id JOIN games_mo
 EXPLAIN ANALYZE SELECT * FROM games WHERE release_date > '01/01/2011'
 EXPLAIN ANALYZE SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
 	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id 
+
+-- VERIFICAR ÍNDICES CRIADOS
+SELECT * FROM pg_indexes WHERE tablename = 'game_genre';
 	
 -- CONSULTAR QUANTIDADE DE LINHAS NA TABELA
 SELECT table_name, count_rows(table_name) 

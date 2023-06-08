@@ -35,7 +35,7 @@ Script em python formulado para realizar a carga no banco de dados relacional co
 ---
 ## Sobre
 
-Conforme as orientações para realização da parte 1 do trabalho da disciplina de Banco de Dados II da Universidade Federal de Itajubá, a equipe desenvolveu um script responsável por realizar a carga nas tabelas do banco. O MER utilizado está presente na Figura abaixo e os códigos SQL para criação do banco na pasta [SQL](https://github.com/MatMB115/script_carga_igdb/blob/main/SQL).
+Conforme as orientações para realização da parte 1 do trabalho da disciplina de Banco de Dados II da Universidade Federal de Itajubá, a equipe desenvolveu um script responsável por realizar a carga nas tabelas do banco. O MER utilizado está presente na Figura abaixo e os códigos SQL para criação do banco na pasta [SQL](./SQL/).
 
 As orientações estão divididas nos seguintes tópicos:
 
@@ -77,7 +77,8 @@ As orientações estão divididas nos seguintes tópicos:
 
 ---
 ## Banco de dados :chair: :game_die:
-A aplicação utiliza um banco relacional presente no modelo entidade relacionamento abaixo...
+A aplicação utiliza um banco relacional presente no modelo entidade relacionamento abaixo:
+![MER_IGDB](./Docs/MER_GAMES.png)
 
 Para realizar a conexão com o banco utilizou-se:
 >PostgreSQL - 15.2
@@ -85,6 +86,12 @@ Para realizar a conexão com o banco utilizou-se:
 >PGadmin4 - 7.2
 
 >SQLAlchemy - 1.4.48
+
+Ademais, o grupo também disponibilizou backups do banco conforme a quantidade de dados inseridos na pasta [Backups](./SQL/backups_banco/).
+Os backups disponíveis são:
+- [x] 230K de jogos
+- [x] 60K de jogos
+- [ ] 80K de jogos
 
 ---
 ## Pré-requisitos e configuração :hammer_and_wrench:
@@ -96,6 +103,8 @@ Para executar esse script é necessário:
 
 ```bash
 
+# Criar o banco com nome IGDB para realizar a carga
+
 # Clone este repositório com
 $ git clone https://github.com/MatMB115/script_carga_igdb
 # OU
@@ -104,18 +113,24 @@ $ git clone git@github.com:MatMB115/script_carga_igdb.git
 # Navegue até o diretório clonado com terminal
 
 $ cd script_carga_igdb
+$ cd script
 
 # Instale as dependências
 $ pip install -r reqs.txt
 
-# Abra script no Vscode e rode com button run
+# Abra script no Vscode ou editor de preferência
 $ code .
-# OU
+
+# No DAO, mude as credenciais de acesso do banco (lembre-se de criar um banco com o nome IGDB pelo SGDB)
+$ engine = create_engine("postgresql+psycopg2://postgres:postgres@localhost:5432/IGDB")
+
 # Rode o script pelo terminal
 $ py controller.py
 # OU
 $ python3 controller.py
 
+# Lembre-se de gerar o Token Twitch (opção 1 do menu) antes de tentar popular as tabelas!
+# Há ums ordem correta identificada no menu para popular elas!
 
 ```
 ---
