@@ -37,7 +37,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">5</stringProp>
+        <stringProp name="ThreadGroup.num_threads">60</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -47,7 +47,8 @@
       <hashTree>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="Requisição JDBC" enabled="true">
           <stringProp name="dataSource">pg_pool</stringProp>
-          <stringProp name="query">SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id</stringProp>
+          <stringProp name="query">SELECT * FROM games g JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
+	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id</stringProp>
           <stringProp name="queryArguments"></stringProp>
           <stringProp name="queryArgumentsTypes"></stringProp>
           <stringProp name="queryTimeout"></stringProp>

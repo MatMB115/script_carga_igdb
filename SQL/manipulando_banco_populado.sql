@@ -41,7 +41,7 @@ SELECT * FROM game_plataform
 SELECT * FROM game_character
 SELECT * FROM game_gamemode
 -- GERAL		
-SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id JOIN character ch ON gch.id_character = ch.id ]
+SELECT * FROM games g JOIN game_character gch ON gch.id_game = g.id JOIN character ch ON gch.id_character = ch.id
 	JOIN game_plataform gp ON gp.id_game = g.id JOIN plataform p ON gp.id_plataform = p.id 
 	JOIN game_company gc ON g.id = gc.id_game JOIN companies cp ON gc.id_company = cp.id 
 	JOIN game_genre gg ON gg.id_game = g.id JOIN genres gr ON gg.id_genre = gr.id

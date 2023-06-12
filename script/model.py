@@ -16,10 +16,10 @@ from datetime import datetime
 from iso3166 import countries_by_numeric
 
 class AcessDB:
-    def insert(plat):
+    def insert(obj):
         try:
             session = DAO.getSession()
-            DAO.insert(session, plat)
+            DAO.insert(session, obj)
             session.commit()
             session.close()
             return 1
