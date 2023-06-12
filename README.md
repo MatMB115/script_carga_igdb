@@ -70,10 +70,10 @@ As orientações estão divididas nos seguintes tópicos:
     - [x] Relacionamneto Modo de Jogo e Games
   - [x] Funções
     - [x] Count das tabelas
-- [ ] Etapa 4
-  - [ ] Testar com JMeter
-  - [ ] Documentação da parte um
-  - [ ] Vídeo explicativo
+- [x] Etapa 4
+  - [x] Testar com JMeter
+  - [x] Documentação da parte um
+  - [x] Vídeo explicativo
 
 ---
 ## Banco de dados :chair: :game_die:
@@ -91,7 +91,6 @@ Ademais, o grupo também disponibilizou backups do banco conforme a quantidade d
 Os backups disponíveis são:
 - [x] 230K de jogos
 - [x] 60K de jogos
-- [ ] 80K de jogos
 
 ---
 ## Pré-requisitos e configuração :hammer_and_wrench:
